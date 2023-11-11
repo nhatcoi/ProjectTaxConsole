@@ -27,6 +27,7 @@ void menu() {
     cout << "Mời bạn nhập: ";
 }
 
+// 1. Han muc
 void taxLimit() {
     cout << "Các trường hợp miễn thuế: \n"
             "Theo Điều 4 của Luật Thuế thu nhập cá nhân và Điều 4 Nghị định 65/2013/NĐ-CP được hướng dẫn chi tiết bởi Điều 3 Thông tư 111/2013/TT-BTC (được sửa đổi bởi khoản 2 Điều 12 và bổ sung bởi khoản 4, 5 Điều 12 Thông tư 92/2015/TT-BTC), các khoản thu nhập được miễn thuế bao gồm:\n"
@@ -129,7 +130,7 @@ T check(T x) {
     return x;
 }
 
-// Hàm nhập thông tin
+// 2. Hàm nhập thông tin
 void enterInfo() {
 
     cout << "Nhập tên : ";
@@ -148,6 +149,7 @@ void enterInfo() {
     cout << "----------------------------------------------------" << endl;
 }
 
+// Cong thuc tinh thue theo thang
 void recipe(int i) {
     taxableIncome = sal[i] - (numDep * DEP_FEE) - TAX_DEDUCTION;
 
@@ -176,71 +178,78 @@ void recipe(int i) {
     taxSal[i] = taxMonth;
 }
 
-// Hàm tính thuế thu nhập cá nhân theo các tháng
+// 3. Hàm tính thuế thu nhập cá nhân theo các tháng
 double * calIncomeTaxForMonths() {
     if(name.empty()) {
         cout << "Vui lòng thực hiện nhập thông tin ở mục 2 trước khi tính thuế!" << endl;
         return nullptr;
     }
-    int cnt = 0;
+
     int a = 0;
-    a = check(a);
-    switch (a) {
-        case 2:{
-            for(int i = 0; i < 12; i++) {
-                cout << "Lương tháng " << i + 1 << " là : ";
-                sal[i] = check(sal[i]);
-            } cout << endl;
+    do {
+        cout << "1. Tính thuế với 1 tháng trong năm." << endl;
+        cout << "2. Tính thuế với cả 12 tháng lương trong năm." << endl;
+        cout << "3. Xem các tháng đã nộp. " << endl;
+        cout << "0. Quay lai menu." << endl;
 
-            for(int i = 0; i < 12; i++) {
-                recipe(i);
-            }
-        }
-        break;
-        case 1:{
-            if(name.empty()) {
-                cout << "Vui lòng thực hiện nhập thông tin ở mục 2 trước khi tính thuế!" << endl;
-                return nullptr;
-            }
-            int month = 1;
-            cout << "Nhap thang : ";
-            month = check(month);
+        int cnt = 0;
+        a = check(a);
+        switch (a) {
+            case 1:{
+                int month = 1;
+                cout << "Nhap thang : ";
+                cin >> month;
 
-            cout << "Nhập lương tháng " << month << " la : ";
-            double salaryMonth = 0;
-            sal[month-1] = check(salaryMonth);
-
-            recipe(month-1);
-            // Output ra thuế 12 tháng
-            for(int index = 0; index < 12; index++) {
-                if(taxSal[index] != 0) {
-                    cout << fixed << setprecision(3);
-                    cout << "Thuế tháng " << index + 1 << " là: " << taxSal[index] << endl;
+                while (month <=0 || month > 12) {
+                    cout << "Sai gia tri, vui long nhap lai : ";
+                    cin >> month;
                 }
-            }
-            break;
-        }
-        case 3: {
-            // Output ra thuế 12 tháng
-            for(int i = 0; i < 12; i++) {
 
-                if(taxSal[i] != 0) {
-                    cout << fixed << setprecision(3);
-                    cout << "Thuế tháng " << i + 1 << " là: " << taxSal[i] << endl;
-                    cnt++;
+                cout << "Nhập lương tháng " << month << " la : ";
+                double salaryMonth = 0;
+                sal[month-1] = check(salaryMonth);
+
+                recipe(month-1);
+                // Output ra thuế 12 tháng
+                for(int index = 0; index < 12; index++) {
+                    if(taxSal[index] != 0) {
+                        cout << fixed << setprecision(3);
+                        cout << "Thuế tháng " << index + 1 << " là: " << taxSal[index] << endl;
+                    }
                 }
+                break;
             }
-            if(cnt == 0) {
-                cout << "Khong co du lieu thue do chua nhap thu nhap ca nhan." << endl;
-            }
-            break;
-        }
-        case 0: {
-            menu();
-            break;
-        }
-    }
 
+            case 2:{
+
+                for(int i = 0; i < 12; i++) {
+                    cout << "Lương tháng " << i + 1 << " là : ";
+                    sal[i] = check(sal[i]);
+                } cout << endl;
+
+                for(int i = 0; i < 12; i++) {
+                    recipe(i);
+                }
+                break;
+            }
+
+            case 3: {
+                // Output ra thuế 12 tháng
+                for(int i = 0; i < 12; i++) {
+
+                    if(taxSal[i] != 0) {
+                        cout << fixed << setprecision(3);
+                        cout << "Thuế tháng " << i + 1 << " là: " << taxSal[i] << endl;
+                        cnt++;
+                    }
+                } cout << endl;
+                if(cnt == 0) {
+                    cout << "Khong co du lieu thue do chua nhap thu nhap ca nhan." << endl;
+                }
+                break;
+            }
+        }
+    } while (a!=0);
 
     return taxSal;
 }
@@ -266,42 +275,37 @@ double sumIncome() {
     return sum;
 }
 
-
 // Hàm quyết toán thuế cả năm
+double calculateTax(double income, double rate) {
+    return income * rate;
+}
+
 void taxForYear() {
-    double temp = 0, receiveOrCollect;
-    if(sumTaxableIncome <= 0) {
-        temp = 0;
-    } else {
-        if(sumTaxableIncome <= 60) {
-            temp = (60 - sumTaxableIncome) * 0.25;
-        } else if(sumTaxableIncome <= 120) {
-            temp = (sumTaxableIncome - 60) * 0.1 + 60*0.05;
-        } else if(sumTaxableIncome <= 216) {
-            temp = 60*0.05 + 60*0.1 + (sumTaxableIncome - 120) * 0.15;
-        } else if(sumTaxableIncome <= 384) {
-            temp = 60*0.05 + 60*0.1 + 96*0.15 + (sumTaxableIncome - 216)*0.2;
-        } else if(sumTaxableIncome < 624) {
-            temp = 60*0.05 + 60*0.1 + 96*0.15 + 168*0.2 +(sumTaxableIncome - 384)*0.25;
-        } else if(sumTaxableIncome < 960) {
-            temp = 60*0.05 + 60*0.1 + 96*0.15 + 168*0.2 + 240*0.25 + (sumTaxableIncome - 624)*0.3;
+    double taxThresholds[] = {60, 120, 216, 384, 624, 960}; // Ngưỡng mức chịu thuế
+    double rates[] = {0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35}; // tỉ lệ theo ngưỡng
+
+    double temp = 0; // thue phai dong
+
+    for (int i = 0; i < sizeof(taxThresholds) / sizeof(taxThresholds[0]); ++i) {
+        if (sumTaxableIncome <= taxThresholds[i]) {
+            temp += calculateTax(sumTaxableIncome - (i > 0 ? taxThresholds[i - 1] : 0), rates[i]);
+            break;
         } else {
-            temp = 60*0.05 + 60*0.1 + 96*0.15 + 168*0.2 + 240*0.25 + 336*0.3 + (sumTaxableIncome - 960);
+            temp += calculateTax(taxThresholds[i] - (i > 0 ? taxThresholds[i - 1] : 0), rates[i]);
         }
     }
 
+    cout << "Tổng thu nhập cả năm: " << sumIncome() << endl;
+    cout << "Tổng thuế đã đóng trong năm: " << sumTaxIncome() << endl;
+    cout << "Tổng thuế phải đóng: " << temp << endl;
 
-    cout << "Tổng thu nhập cả năm : " << sumIncome() << endl; // 1
-    cout << "Tổng thuế đã đóng trong năm : " << sumTaxIncome() << endl; // 2- tong thue đã dong trong nam
-    cout << "Tong thue phai dong : " << temp << endl;
-    if(temp < sumTaxIncome()) {
-        cout << "Truy linh : " << sumTaxIncome()-temp << endl;
-    } else if(temp == sumTaxableIncome) {
-        cout << "Khong phai truy thu, linh." << endl;
-    }else {
-        cout << "Truy thu : " << temp-sumTaxIncome() << endl;
+    if (temp < sumTaxIncome()) {
+        cout << "Truy lĩnh: " << sumTaxIncome() - temp << endl;
+    } else if (temp == sumTaxIncome()) {
+        cout << "Không phải truy thu, lĩnh." << endl;
+    } else {
+        cout << "Truy thu: " << temp - sumTaxIncome() << endl;
     }
-
 }
 
 
@@ -327,10 +331,6 @@ int main() {
             }
             case 3: {
                 // Mảng chứa thuế của 12 tháng
-                cout << "1. Tính thuế với 1 tháng trong năm." << endl;
-                cout << "2. Tính thuế với cả 12 tháng lương trong năm." << endl;
-                cout << "3. Xem các tháng đã nộp. " << endl;
-                cout << "0. Quay lai menu." << endl;
                 calIncomeTaxForMonths();
 
                 break;
@@ -340,7 +340,6 @@ int main() {
                 taxForYear();
             }
             default: {
-
                 cout << "\nThực hiện xong " << endl;
             }
         }
