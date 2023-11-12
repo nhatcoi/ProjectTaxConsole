@@ -19,7 +19,7 @@ float taxableIncome = 0, sumTaxableIncome = 0, taxMonth = 0; // Thu nhap tinh th
 // main menu
 void menu() {
     cout << "--------------------------------------" << endl;
-    cout << "|           MENU CHƯƠNG TRÌNH          |" << endl;
+    cout << "|           MENU CHUONG TRINH         |" << endl;
     cout << "--------------------------------------" << endl;
     cout << "|  1. Han muc mien tru thue            |" << endl;
     cout << "|  2. Nhap thong tin tinh thue         |" << endl;
@@ -277,23 +277,22 @@ int main() {
         }
         switch (feature) {
             case 1: {
-                // Thông tin về mức thuế
+                // Thong tin ve muc thue
                 taxLimit();
                 break;
             }
             case 2: {
-                // Nhập thông tin
+                // Nhap thong tin
                 enterInfo();
                 break;
             }
             case 3: {
-                // Mảng chứa thuế của 12 tháng
+                // Thue cua cac thang
                 calIncomeTaxForMonths();
-
                 break;
             }
             case  4: {
-                // Thuế cả năm
+                // Thue ca nam
                 taxForYear();
             }
             default: {
