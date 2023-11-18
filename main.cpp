@@ -53,8 +53,8 @@ int main() {
 
 struct {
 float
-    TAX_DEDUCTION = 11.0, // giam tru thue
-    DEP_FEE = 4.4; // giam tru phi phu thuoc
+    taxDeduction = 11.0, // giam tru
+    depFee = 4.4; // giam tru phi phu thuoc
 float const
     TAX_LIMIT[7] = {0, 0.25, 0.75, 1.65, 3.25, 5.85, 9.85}, // Ham muc thue.
     TAX_RATE[7] = {0, 5, 10, 18, 32, 52, 80},   // ham muc tang % thue.
@@ -107,8 +107,8 @@ T check(T x) {
 void taxLimit() {
     int choice;
     do {
-        cout << "Mien tru gia canh ban than la " << limit.TAX_DEDUCTION << " trieu VND" << endl;
-        cout << "Mien tru nguoi phu thuoc la " << limit.DEP_FEE << " trieu VND / nguoi" << endl;
+        cout << "Mien tru gia canh ban than la " << limit.taxDeduction << " trieu VND" << endl;
+        cout << "Mien tru nguoi phu thuoc la " << limit.depFee << " trieu VND / nguoi" << endl;
         cout << "Ban co muon thay doi muc giam tru thue khong?" << endl;
         cout << "1. Thay doi\n" << "0.Quay lai" << endl;
         cout << "Nhap : ";
@@ -119,9 +119,9 @@ void taxLimit() {
         }
 
         if(choice == 1) {
-            float m = limit.TAX_DEDUCTION, n = limit.DEP_FEE;
-            cout << "Nhap mien tru gia canh moi (trieu VND) : "; limit.TAX_DEDUCTION = check(limit.TAX_DEDUCTION);
-            cout << "Mien tru nguoi phu thuoc la (trieu VND): "; limit.DEP_FEE = check(limit.DEP_FEE);
+            float m = limit.taxDeduction, n = limit.depFee;
+            cout << "Nhap mien tru gia canh moi (trieu VND) : "; limit.taxDeduction = check(limit.taxDeduction);
+            cout << "Mien tru nguoi phu thuoc la (trieu VND): "; limit.depFee = check(limit.depFee);
             cout << "Du lieu quan trong, ban da chac chan thay doi muc phi chu?" << endl;
             cout << "1. OK\n" << "0. Quay lai";
             int k = 0; k = check(k);
@@ -129,8 +129,8 @@ void taxLimit() {
                 cout << "Sai gia tri, nhap lai: "; k = check(k);
             }
             if(k==0) {
-                limit.TAX_DEDUCTION = m;
-                limit.DEP_FEE = n;
+                limit.taxDeduction = m;
+                limit.depFee = n;
                 break;
             }
             cout << "\nMuc mien tru da duoc cap nhat!!" << endl;
@@ -164,7 +164,7 @@ void enterInfo() {
 // 3. Tinh thue TNCN theo thang.
 // Ham cong thuc tinh thue theo thang
 void recipe(int i) {
-    tax.taxableIncome = tax.sal[i] - (static_cast<float>(inFor.numDep) * limit.DEP_FEE) - limit.TAX_DEDUCTION;
+    tax.taxableIncome = tax.sal[i] - (static_cast<float>(inFor.numDep) * limit.depFee) - limit.taxDeduction;
 
     if (tax.taxableIncome <= 0) {
         tax.taxMonth = 0;
