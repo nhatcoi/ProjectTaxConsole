@@ -154,10 +154,17 @@ void enterInfo() {  // input thong tin
 
     cout << "Nam tinh thue : ";
     inFor.year = check(inFor.year);
+    while(inFor.year < 2000) {
+        cout << "Tinh thue ap dung voi nien dai 2000 tro di.\nNam tinh thue: "; inFor.year = check(inFor.year);
+    }
     cout << "So nguoi phu thuoc : ";
     inFor.numDep = check(inFor.numDep);
 
     displayInfo();
+
+    cout << "0. Thoat." << endl; int out; cin >> out;
+    while(out!=0) { cout << "Sai du lieu, nhap lai : "; cin >> out; }
+
 }
 
 // 3. Tinh thue TNCN theo thang.
@@ -255,13 +262,18 @@ float * calIncomeTaxForMonths() {
 
             case 3: {
                 // Output ra thuế 12 tháng
+                cout << setw(10) << left << "Thang";
+                cout << setw(35) << left << "| Thue (trieu VND)" << endl;
+                cout << "------------------------------"<< endl;
+
                 for(int i = 0; i < 12; i++) {
                     if(tax.taxSal[i] != 0) {
-                        cout << fixed << setprecision(6);
-                        cout << "Thue thang " << i + 1 << " la: " << tax.taxSal[i] << " (trieu VND)" << endl;
+                        cout << setw(10) << left << "Thang " + to_string(i + 1);
+                        cout << setw(25) << left << "| " + to_string(tax.taxSal[i]) << endl;
                         cnt++;
                     }
-                } cout << endl;
+                }
+                cout << "------------------------------"<< endl;
                 if(cnt == 0) cout << "Khong co du lieu phai nop thue, hoac do chua nhap thu nhap ca nhan.\n" << endl;
                 break;
             }
@@ -308,21 +320,30 @@ void taxForYear() {
     }
 
     displayInfo(); // hien thi thong tin
-    cout << "Tong thu nhap ca nam : " << sumIncome() << " (trieu VND)" << endl;
-    cout << "Tong thue TNCN da dong : " << sumTaxIncome() << " (trieu VND)" << endl;
-    cout << "Tong thue phai dong : " << taxPaid << " (trieu VND)" << endl;
+
+    cout << "\n---------------------- THONG TIN -------------------" << endl;
+    cout << left << setw(20) << "| Ten:               " << setw(30) << right << inFor.name << " |" << endl;
+    cout << left << setw(20) << "| Nam tinh thue:     " << setw(30) << right << inFor.year << " |" << endl;
+    cout << left << setw(20) << "| So nguoi phu thuoc:" << setw(30) << right << inFor.numDep << " |" << endl;
+    cout << "|---------------------------------------------------|" << endl;
+
+    cout << "| Tong thu nhap ca nam : " << setw(14) << right << sumIncome() << " (trieu VND) |" << endl;
+    cout << "| Tong thue TNCN da dong : " << setw(12) << right << sumTaxIncome() << " (trieu VND) |" << endl;
+    cout << "| Tong thue phai dong : " << setw(15) << right << taxPaid << " (trieu VND) |" << endl;
+
+    cout << "|---------------------------------------------------|" << endl;
 
     if (taxPaid < sumTaxIncome()) {
-        cout << "Truy linh: " << sumTaxIncome() - taxPaid << " (trieu VND)" << endl;
+        cout << "Truy linh: " << setw(28) << right << sumTaxIncome() - taxPaid << " (trieu VND) |" << endl;
     } else if (taxPaid == sumTaxIncome()) {
         cout << "Khong phai truy thu, truy linh." << endl;
     } else {
-        cout << "Truy thu: " << taxPaid - sumTaxIncome() << " (trieu VND)" << endl;
+        cout << "Truy thu: " << setw(29) << right << taxPaid - sumTaxIncome() << " (trieu VND) |" << endl;
     }
+    cout << "--------------------------END-----------------------\n" << endl;
 
-    cout << "0. Thoat." << endl;
-    short out; cin >> out;
-    while(out != 0) {
-        cout << "Nhap sai du lieu, nhap lai : "; cin >> out;
-    }
+    cout << "0. Thoat." << endl; short out; cin >> out;
+    while(out != 0) { cout << "Nhap sai du lieu, nhap lai : "; cin >> out; }
 }
+
+
