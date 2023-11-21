@@ -1,6 +1,5 @@
 #include<iostream>
 #include<iomanip>
-#include <cstdlib>
 
 using namespace std;
 
@@ -32,7 +31,6 @@ void taxLimit();
 void enterInfo();
 float * calIncomeTaxForMonths();
 void taxForYear();
-void clearConsole();
 
 int main() {
     short feature = 0;
@@ -131,6 +129,7 @@ void taxLimit() {
             while(k!=0 && k!=1) {
                 cout << "Sai gia tri, nhap lai: "; cin >> k;
             }
+
             // Khong thay doi
             if(k==0) {
                 limit.taxDeduction = m;
@@ -314,18 +313,24 @@ float calculateTax(float income, float rate) {
 }
 
 void taxForYear() {
-    // thue phai dong
-    float taxPaid = 0;
+    //thue da dong ca nam
+    float taxPaid = sumTaxIncome();
+    // thue phai dong ca nam
+    float taxPay = 0;
+
+    // Tinh thue phai dong ca nam
     int n = sizeof(limit.TAX_THRESHOLDS) / sizeof(limit.TAX_THRESHOLDS[0]); // size cua han muc (6)
     for (int i = 0; i < n; ++i) {
         if (tax.sumTaxableIncome <= limit.TAX_THRESHOLDS[i]) {
-            taxPaid += calculateTax(tax.sumTaxableIncome - (i > 0 ? limit.TAX_THRESHOLDS[i - 1] : 0), limit.RATES[i]);
+            taxPay += calculateTax(tax.sumTaxableIncome - (i > 0 ? limit.TAX_THRESHOLDS[i - 1] : 0), limit.RATES[i]);
             break;
         } else {
-            taxPaid += calculateTax(limit.TAX_THRESHOLDS[i] - (i > 0 ? limit.TAX_THRESHOLDS[i - 1] : 0), limit.RATES[i]);
+            taxPay += calculateTax(limit.TAX_THRESHOLDS[i] - (i > 0 ? limit.TAX_THRESHOLDS[i - 1] : 0), limit.RATES[i]);
         }
     }
-    float retrieval = taxPaid - sumTaxIncome();
+
+    // truy linh, truy thu
+    float retrieval = taxPaid - taxPay;
 
     // hien thi thong tin
     cout << "\n---------------------- THONG TIN -------------------" << endl;
@@ -335,17 +340,17 @@ void taxForYear() {
     cout << "|---------------------------------------------------|" << endl;
     cout << "| Tong thu nhap ca nam : " << setw(14) << right << sumIncome() << " (trieu VND) |" << endl;
     cout << "| Tong thue TNCN da dong : " << setw(12) << right << sumTaxIncome() << " (trieu VND) |" << endl;
-    cout << "| Tong thue phai dong : " << setw(15) << right << taxPaid << " (trieu VND) |" << endl;
+    cout << "| Tong thue phai dong : " << setw(15) << right << taxPay << " (trieu VND) |" << endl;
     cout << "|---------------------------------------------------|" << endl;
 
     // Quyet toan truy linh, truy thu.
-
-    if (taxPaid < sumTaxIncome()) {
+    if (taxPay < sumTaxIncome()) {
         cout << "Truy linh: " << setw(28) << right << retrieval << " (trieu VND) |" << endl;
-    } else if (taxPaid == sumTaxIncome()) {
+    } else if (taxPay == sumTaxIncome()) {
         cout << "Khong phai truy thu, truy linh." << endl;
     } else {
-        cout << "Truy thu: " << setw(29) << right << retrieval * (-1) << " (trieu VND) |" << endl;
+        retrieval *= (-1);
+        cout << "Truy thu: " << setw(29) << right << retrieval << " (trieu VND) |" << endl;
     }
     cout << "--------------------------END-----------------------\n" << endl;
 
