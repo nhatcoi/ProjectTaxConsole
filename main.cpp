@@ -1,7 +1,29 @@
 #include<iostream>
 #include<iomanip>
+#include <cstdlib>
 
 using namespace std;
+
+struct taxLimits {
+    float
+            taxDeduction = 11.0, // giam tru
+    depFee = 4.4; // giam tru phi phu thuoc
+    const float
+            TAX_LIMIT[7] = {0, 0.25, 0.75, 1.65, 3.25, 5.85, 9.85}, // Ham muc thue.
+    TAX_RATE[7] = {0, 5, 10, 18, 32, 52, 80},   // ham muc tang % thue.
+    TAX_THRESHOLDS[6] = {60, 120, 216, 384, 624, 960}, // Nguong muc chiu thue
+    RATES[7] = {0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35}; // ti le theo nguong
+} limit;
+
+struct UserInfo{
+    string name; // ten nguoi dung.
+    int year = 0, numDep = 0; // nam tinh thue, so nguoi phu thuoc.
+} inFor;
+
+struct taxInfo {
+    float taxSal[12]{}, sal[12]{}, // Thue thu nhap theo thang, và luong theo thang.
+    taxableIncome = 0, sumTaxableIncome = 0, taxMonth = 0; // Thu nhap tinh thue, tong thu nhap tinh thue, thue thang.
+} tax;
 
 void menu();
 template <typename T>
@@ -10,6 +32,7 @@ void taxLimit();
 void enterInfo();
 float * calIncomeTaxForMonths();
 void taxForYear();
+void clearConsole();
 
 int main() {
     short feature = 0;
@@ -50,27 +73,9 @@ int main() {
 }
 // end
 
-//
-struct taxLimits {
-float
-    taxDeduction = 11.0, // giam tru
-    depFee = 4.4; // giam tru phi phu thuoc
-const float
-    TAX_LIMIT[7] = {0, 0.25, 0.75, 1.65, 3.25, 5.85, 9.85}, // Ham muc thue.
-    TAX_RATE[7] = {0, 5, 10, 18, 32, 52, 80},   // ham muc tang % thue.
-    TAX_THRESHOLDS[6] = {60, 120, 216, 384, 624, 960}, // Nguong muc chiu thue
-    RATES[7] = {0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35}; // ti le theo nguong
-} limit;
-
-struct UserInfo{
-        string name; // ten nguoi dung.
-        int year = 0, numDep = 0; // nam tinh thue, so nguoi phu thuoc.
-} inFor;
-
-struct taxInfo {
-    float taxSal[12]{}, sal[12]{}, // Thue thu nhap theo thang, và luong theo thang.
-    taxableIncome = 0, sumTaxableIncome = 0, taxMonth = 0; // Thu nhap tinh thue, tong thu nhap tinh thue, thue thang.
-} tax;
+//void clearConsole() {
+//    system("clear");
+//}
 
 // main menu
 void menu() {
@@ -119,7 +124,7 @@ void taxLimit() {
             cout << "Nhap mien tru gia canh moi (trieu VND) : "; limit.taxDeduction = check(limit.taxDeduction);
             cout << "Mien tru nguoi phu thuoc la (trieu VND): "; limit.depFee = check(limit.depFee);
             cout << "Du lieu quan trong, ban da chac chan thay doi muc phi chu?" << endl;
-            cout << "1. OK\n" << "0. Quay lai";
+            cout << "1. OK\n" << "0. Quay lai" << endl;
 
             // check validation
             int k; cin >> k;
@@ -323,7 +328,6 @@ void taxForYear() {
     float retrieval = taxPaid - sumTaxIncome();
 
     // hien thi thong tin
-    displayInfo();
     cout << "\n---------------------- THONG TIN -------------------" << endl;
     cout << left << setw(20) << "| Ten:               " << setw(30) << right << inFor.name << " |" << endl;
     cout << left << setw(20) << "| Nam tinh thue:     " << setw(30) << right << inFor.year << " |" << endl;
