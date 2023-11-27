@@ -256,29 +256,39 @@ float * calIncomeTaxForMonths() {
                 }
 
                 // Output ra thuế 12 tháng
-                for(int index = 0; index < 12; index++) {
-                    if(tax.taxSal[index] != 0) {
-                        cout << fixed << setprecision(6);
-                        cout << "Thue thang " << index + 1 << " la : " << tax.taxSal[index] << " (trieu VND)"<< endl;
+                cout << setw(10) << left << "Thang";
+                cout << setw(35) << left << "| Luong (trieu VND)";
+                cout << left << "| Thue (trieu VND)" << endl;
+                cout << "----------------------------------------------------------------"<< endl;
+
+                for(int i = 0; i < 12; i++) {
+                    if(tax.taxSal[i] != 0) {
+                        cout << setw(10) << left << "Thang " + to_string(i + 1);
+                        cout << setw(5) << left << "| " + to_string(tax.sal[i]);
+                        cout << "                        " << left << "| " + to_string(tax.taxSal[i]) << endl;
+                        cnt++;
                     }
-                } cout << endl;
+                }
+                cout << "----------------------------------------------------------------"<< endl;
                 break;
             }
 
             case 3: {
                 // Output ra thuế 12 tháng
                 cout << setw(10) << left << "Thang";
-                cout << setw(35) << left << "| Thue (trieu VND)" << endl;
-                cout << "------------------------------"<< endl;
+                cout << setw(35) << left << "| Luong (trieu VND)";
+                cout << left << "| Thue (trieu VND)" << endl;
+                cout << "----------------------------------------------------------------"<< endl;
 
                 for(int i = 0; i < 12; i++) {
                     if(tax.taxSal[i] != 0) {
                         cout << setw(10) << left << "Thang " + to_string(i + 1);
-                        cout << setw(25) << left << "| " + to_string(tax.taxSal[i]) << endl;
+                        cout << setw(5) << left << "| " + to_string(tax.sal[i]);
+                        cout << "                        " << left << "| " + to_string(tax.taxSal[i]) << endl;
                         cnt++;
                     }
                 }
-                cout << "------------------------------"<< endl;
+                cout << "----------------------------------------------------------------"<< endl;
                 if(cnt == 0) cout << "Khong co du lieu phai nop thue, hoac do chua nhap thu nhap ca nhan.\n" << endl;
                 break;
             }
