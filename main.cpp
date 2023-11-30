@@ -192,8 +192,8 @@ void recipe(int i) {
                 tax.taxMonth = static_cast<float>(tax.taxableIncome * (0.05 + 0.05 * (n-1)) - limit.TAX_LIMIT[6]);
             }
         }
+        tax.sumTaxableIncome += tax.taxableIncome; // Tong thu nhap tinh thue
     }
-    tax.sumTaxableIncome += tax.taxableIncome; // Tong thu nhap tinh thue
     tax.taxSal[i] = tax.taxMonth; // Tong luong 12 thang
 }
 
@@ -214,7 +214,7 @@ float * calIncomeTaxForMonths() {
 
         short cnt = 0;
         cin >> a;
-        while(a > 4 || a < 0) {
+        while(a != 0 && a != 1 && a!= 2 && a != 999) {
             cout << "Sai gia tri, nhap lai :"; cin >> a;
         }
         switch (a) {
@@ -242,35 +242,35 @@ float * calIncomeTaxForMonths() {
                 break;
             }
 
-//            case 2:{
-//                // Input 12 thang luong
-//                for(int i = 0; i < 12; i++) {
-//                    cout << "Luong thang " << i + 1 << " la (trieu VND): ";
-//                    tax.sal[i] = check(tax.sal[i]);
-//                } cout << endl;
-//
-//                // Tinh thue theo cong thuc voi 12 thang
-//                for(int i = 0; i < 12; i++) {
-//                    recipe(i);
-//                }
-//
-//                // Output ra thuế 12 tháng
-//                cout << setw(10) << left << "Thang";
-//                cout << setw(35) << left << "| Luong (trieu VND)";
-//                cout << left << "| Thue (trieu VND)" << endl;
-//                cout << "----------------------------------------------------------------"<< endl;
-//
-//                for(int i = 0; i < 12; i++) {
-//                    if(tax.taxSal[i] != 0) {
-//                        cout << setw(10) << left << "Thang " + to_string(i + 1);
-//                        cout << setw(5) << left << "| " + to_string(tax.sal[i]);
-//                        cout << "                        " << left << "| " + to_string(tax.taxSal[i]) << endl;
-//                        cnt++;
-//                    }
-//                }
-//                cout << "----------------------------------------------------------------"<< endl;
-//                break;
-//            }
+            case 999:{
+                // Input 12 thang luong
+                for(int i = 0; i < 12; i++) {
+                    cout << "Luong thang " << i + 1 << " la (trieu VND): ";
+                    tax.sal[i] = check(tax.sal[i]);
+                } cout << endl;
+
+                // Tinh thue theo cong thuc voi 12 thang
+                for(int i = 0; i < 12; i++) {
+                    recipe(i);
+                }
+
+                // Output ra thuế 12 tháng
+                cout << setw(10) << left << "Thang";
+                cout << setw(35) << left << "| Luong (trieu VND)";
+                cout << left << "| Thue (trieu VND)" << endl;
+                cout << "----------------------------------------------------------------"<< endl;
+
+                for(int i = 0; i < 12; i++) {
+                    if(tax.taxSal[i] != 0) {
+                        cout << setw(10) << left << "Thang " + to_string(i + 1);
+                        cout << setw(5) << left << "| " + to_string(tax.sal[i]);
+                        cout << "                        " << left << "| " + to_string(tax.taxSal[i]) << endl;
+                        cnt++;
+                    }
+                }
+                cout << "----------------------------------------------------------------"<< endl;
+                break;
+            }
 
             case 2: {
                 cout << setw(10) << left << "Thang";
