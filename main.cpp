@@ -209,8 +209,7 @@ float * calIncomeTaxForMonths() {
     do {
         // tinh thue va xem thue
         cout << "1. Tinh thue voi mot thang trong nam." << endl;
-        cout << "2. Tinh thue voi ca 12 thang trong nam." << endl;
-        cout << "3. Hien thi cac thang da nop thue. " << endl;
+        cout << "2. Hien thi cac thang da nop thue. " << endl;
         cout << "0. Quay lai menu." << endl;
 
         short cnt = 0;
@@ -243,52 +242,56 @@ float * calIncomeTaxForMonths() {
                 break;
             }
 
-            case 2:{
-                // Input 12 thang luong
-                for(int i = 0; i < 12; i++) {
-                    cout << "Luong thang " << i + 1 << " la (trieu VND): ";
-                    tax.sal[i] = check(tax.sal[i]);
-                } cout << endl;
+//            case 2:{
+//                // Input 12 thang luong
+//                for(int i = 0; i < 12; i++) {
+//                    cout << "Luong thang " << i + 1 << " la (trieu VND): ";
+//                    tax.sal[i] = check(tax.sal[i]);
+//                } cout << endl;
+//
+//                // Tinh thue theo cong thuc voi 12 thang
+//                for(int i = 0; i < 12; i++) {
+//                    recipe(i);
+//                }
+//
+//                // Output ra thuế 12 tháng
+//                cout << setw(10) << left << "Thang";
+//                cout << setw(35) << left << "| Luong (trieu VND)";
+//                cout << left << "| Thue (trieu VND)" << endl;
+//                cout << "----------------------------------------------------------------"<< endl;
+//
+//                for(int i = 0; i < 12; i++) {
+//                    if(tax.taxSal[i] != 0) {
+//                        cout << setw(10) << left << "Thang " + to_string(i + 1);
+//                        cout << setw(5) << left << "| " + to_string(tax.sal[i]);
+//                        cout << "                        " << left << "| " + to_string(tax.taxSal[i]) << endl;
+//                        cnt++;
+//                    }
+//                }
+//                cout << "----------------------------------------------------------------"<< endl;
+//                break;
+//            }
 
-                // Tinh thue theo cong thuc voi 12 thang
-                for(int i = 0; i < 12; i++) {
-                    recipe(i);
-                }
-
-                // Output ra thuế 12 tháng
+            case 2: {
                 cout << setw(10) << left << "Thang";
-                cout << setw(35) << left << "| Luong (trieu VND)";
-                cout << left << "| Thue (trieu VND)" << endl;
-                cout << "----------------------------------------------------------------"<< endl;
+                cout << setw(15) << left << "| Luong (trieu VND)";
+                cout << setw(15) << right << "         | Thue (trieu VND)" << endl;
 
-                for(int i = 0; i < 12; i++) {
-                    if(tax.taxSal[i] != 0) {
+                // Separator line
+                cout << setfill('-') << setw(55) << "" << setfill(' ') << endl;
+
+                // Data rows
+                for (int i = 0; i < 12; i++) {
+                    if (tax.taxSal[i] != 0) {
                         cout << setw(10) << left << "Thang " + to_string(i + 1);
-                        cout << setw(5) << left << "| " + to_string(tax.sal[i]);
-                        cout << "                        " << left << "| " + to_string(tax.taxSal[i]) << endl;
+                        cout << setw(15) << left << "| " + to_string(tax.sal[i]);
+                        cout << setw(15) << right << "| " << to_string(tax.taxSal[i]) << endl;
                         cnt++;
                     }
                 }
-                cout << "----------------------------------------------------------------"<< endl;
-                break;
-            }
 
-            case 3: {
-                // Output ra thuế 12 tháng
-                cout << setw(10) << left << "Thang";
-                cout << setw(35) << left << "| Luong (trieu VND)";
-                cout << left << "| Thue (trieu VND)" << endl;
-                cout << "----------------------------------------------------------------"<< endl;
-
-                for(int i = 0; i < 12; i++) {
-                    if(tax.taxSal[i] != 0) {
-                        cout << setw(10) << left << "Thang " + to_string(i + 1);
-                        cout << setw(5) << left << "| " + to_string(tax.sal[i]);
-                        cout << "                        " << left << "| " + to_string(tax.taxSal[i]) << endl;
-                        cnt++;
-                    }
-                }
-                cout << "----------------------------------------------------------------"<< endl;
+                // Separator line
+                cout << setfill('-') << setw(55) << "" << setfill(' ') << endl;
                 if(cnt == 0) cout << "Khong co du lieu phai nop thue, hoac do chua nhap thu nhap ca nhan.\n" << endl;
                 break;
             }
