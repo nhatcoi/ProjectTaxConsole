@@ -5,8 +5,8 @@ using namespace std;
 
 struct taxLimits {
     float
-            taxDeduction = 11.0, // giam tru
-    depFee = 4.4; // giam tru phi phu thuoc
+        taxDeduction = 11.0, // giam tru
+        depFee = 4.4; // giam tru phi phu thuoc
     const float
             TAX_LIMIT[7] = {0, 0.25, 0.75, 1.65, 3.25, 5.85, 9.85}, // Ham muc thue.
     TAX_RATE[7] = {0, 5, 10, 18, 32, 52, 80},   // ham muc tang % thue.
