@@ -12,27 +12,31 @@ struct taxLimits {
     TAX_RATE[7] = {0, 5, 10, 18, 32, 52, 80},   // ham muc tang % thue.
     TAX_THRESHOLDS[6] = {60, 120, 216, 384, 624, 960}, // Nguong muc chiu thue
     RATES[7] = {0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35}; // ti le theo nguong
-} limit;
+};
 
 struct UserInfo{
     string name; // ten nguoi dung.
     int year = 0, numDep = 0; // nam tinh thue, so nguoi phu thuoc.
-} inFor;
+};
 
 struct taxInfo {
     float taxSal[12]{}, sal[12]{}, // Thue thu nhap theo thang, và luong theo thang.
     taxableIncome = 0, sumTaxableIncome = 0, taxMonth = 0; // Thu nhap tinh thue, tong thu nhap tinh thue, thue thang.
-} tax;
+};
 
 void menu();
 template <typename T>
 T check(T x);
-void taxLimit();
-void enterInfo();
-float * calIncomeTaxForMonths();
-void taxForYear();
+void taxLimit(taxLimits& L);
+void enterInfo(UserInfo& I);
+float * calIncomeTaxForMonths(UserInfo& I, taxInfo& T, taxLimits& L);
+void taxForYear(UserInfo& I, taxInfo& T, taxLimits& L);
 
 int main() {
+    taxLimits L;
+    UserInfo I;
+    taxInfo T;
+
     short feature = 0;
     do {
         menu();
@@ -44,22 +48,22 @@ int main() {
         switch (feature) {
             case 1: {
                 // Thong tin ve muc thue
-                taxLimit();
+                taxLimit(L);
                 break;
             }
             case 2: {
                 // Nhap thong tin
-                enterInfo();
+                enterInfo(I);
                 break;
             }
             case 3: {
                 // Thue cua cac thang
-                calIncomeTaxForMonths();
+                calIncomeTaxForMonths(I, T, L);
                 break;
             }
             case  4: {
                 // Thue ca nam
-                taxForYear();
+                taxForYear(I, T, L);
                 break;
             }
             default: {
@@ -101,7 +105,7 @@ T check(T x) {
 }
 
 // 1. Han muc
-void taxLimit() {
+void taxLimit(taxLimits& limit) {
     int choice;
     do {
         cout << "Mien tru gia canh ban than la " << limit.taxDeduction << " trieu VND" << endl;
@@ -142,7 +146,7 @@ void taxLimit() {
 }
 
 // 2. Ham thong tin
-void displayInfo() { // display thong tin
+void displayInfo(UserInfo& inFor) { // display thong tin
     cout << "\n---------------------- THONG TIN -------------------" << endl;
     cout << left << setw(20) << "| Ten:               " << setw(30) << right << inFor.name << "|" << endl;
     cout << left << setw(20) << "| Nam tinh thue:     " << setw(30) << right << inFor.year << "|" << endl;
@@ -150,7 +154,7 @@ void displayInfo() { // display thong tin
     cout << "--------------------------END-----------------------\n" << endl;
 }
 
-void enterInfo() {  // input thong tin
+void enterInfo(UserInfo& inFor) {  // input thong tin
 
     cout << "Nhap ten : ";
     cin.ignore();
@@ -164,7 +168,7 @@ void enterInfo() {  // input thong tin
     cout << "So nguoi phu thuoc : ";
     inFor.numDep = check(inFor.numDep);
 
-    displayInfo();
+    displayInfo(inFor);
 
     cout << "0. Thoat." << endl; int out; cin >> out;
     while(out!=0) { cout << "Sai du lieu, nhap lai : "; cin >> out; }
@@ -173,7 +177,7 @@ void enterInfo() {  // input thong tin
 
 // 3. Tinh thue TNCN theo thang.
 // Ham cong thuc tinh thue theo thang
-void recipe(int i) {
+void recipe(int i, UserInfo& inFor, taxInfo& tax, taxLimits& limit) {
     // Thu nhap tinh thue = Muc luong thang - snpt * muc phu thuoc - muc mien tru thue.
     tax.taxableIncome = tax.sal[i] - (static_cast<float>(inFor.numDep) * limit.depFee) - limit.taxDeduction;
 
@@ -198,7 +202,7 @@ void recipe(int i) {
 }
 
 // Ham tinh thue TNCN theo cac thang.
-float * calIncomeTaxForMonths() {
+float * calIncomeTaxForMonths(UserInfo& inFor, taxInfo& tax, taxLimits& limit) {
     // check validation thong tin nguoi dung
     if(inFor.name.empty()) {
         cout << "Vui long thuc hien nhap thong tin o muc 2 truoc khi tinh thue!" << endl;
@@ -234,7 +238,7 @@ float * calIncomeTaxForMonths() {
                 tax.sal[month-1] = check(salaryMonth);
 
                 // Cong thuc tinh thue theo thang
-                recipe(month-1);
+                recipe(month-1, inFor, tax, limit);
 
                 // Output ra thue thang
                 cout << fixed << setprecision(6);
@@ -251,7 +255,7 @@ float * calIncomeTaxForMonths() {
 
                 // Tinh thue theo cong thuc voi 12 thang
                 for(int i = 0; i < 12; i++) {
-                    recipe(i);
+                    recipe(i, inFor, tax, limit);
                 }
 
                 // Output ra thuế 12 tháng
@@ -303,7 +307,7 @@ float * calIncomeTaxForMonths() {
 
 // 4. Quyet toan ca nam
 // Ham tinh tong thue TNCN da dong trong nam.
-float sumTaxIncome() {
+float sumTaxIncome(taxInfo& tax) {
     float sum = 0;
     for (float salary : tax.taxSal) {
         sum += salary;
@@ -312,7 +316,7 @@ float sumTaxIncome() {
 }
 
 // Ham tinh tong TNCN trong ca nam
-float sumIncome() {
+float sumIncome(taxInfo& tax) {
     float sum = 0;
     for (float i : tax.sal) {
         sum += i;
@@ -325,9 +329,9 @@ float calculateTax(float income, float rate) {
     return income * rate;
 }
 
-void taxForYear() {
+void taxForYear(UserInfo& inFor, taxInfo& tax, taxLimits& limit) {
     //thue da dong ca nam
-    float taxPaid = sumTaxIncome();
+    float taxPaid = sumTaxIncome(tax);
     // thue phai dong ca nam
     float taxPay = 0;
 
@@ -351,15 +355,15 @@ void taxForYear() {
     cout << left << setw(20) << "| Nam tinh thue:     " << setw(30) << right << inFor.year << " |" << endl;
     cout << left << setw(20) << "| So nguoi phu thuoc:" << setw(30) << right << inFor.numDep << " |" << endl;
     cout << "|---------------------------------------------------|" << endl;
-    cout << "| Tong thu nhap ca nam : " << setw(14) << right << sumIncome() << " (trieu VND) |" << endl;
-    cout << "| Tong thue TNCN da dong : " << setw(12) << right << sumTaxIncome() << " (trieu VND) |" << endl;
+    cout << "| Tong thu nhap ca nam : " << setw(14) << right << sumIncome(tax) << " (trieu VND) |" << endl;
+    cout << "| Tong thue TNCN da dong : " << setw(12) << right << sumTaxIncome(tax) << " (trieu VND) |" << endl;
     cout << "| Tong thue phai dong : " << setw(15) << right << taxPay << " (trieu VND) |" << endl;
     cout << "|---------------------------------------------------|" << endl;
 
     // Quyet toan truy linh, truy thu.
-    if (taxPay < sumTaxIncome()) {
+    if (taxPay < sumTaxIncome(tax)) {
         cout << "Truy linh: " << setw(28) << right << retrieval << " (trieu VND) |" << endl;
-    } else if (taxPay == sumTaxIncome()) {
+    } else if (taxPay == sumTaxIncome(tax)) {
         cout << "Khong phai truy thu, truy linh." << endl;
     } else {
         retrieval *= (-1);

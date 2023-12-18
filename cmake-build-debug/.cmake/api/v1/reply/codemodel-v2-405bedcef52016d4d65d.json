@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "TinhThueC__::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-TinhThueC__-Debug-ecb6ea4323da6aa6eee7.json",
+					"jsonFile" : "target-TinhThueC__-Debug-b773da0e1b4cbf1b9e7b.json",
 					"name" : "TinhThueC__",
 					"projectIndex" : 0
 				}
@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/nhatcoi/Documents/NHATCOI/C++/TinhThueC++/cmake-build-debug",
-		"source" : "/Users/nhatcoi/Documents/NHATCOI/C++/TinhThueC++"
+		"build" : "/Users/nhatcoi/Documents/NHATCOI/PROGRAMMING/CPP/TinhThueC++/cmake-build-debug",
+		"source" : "/Users/nhatcoi/Documents/NHATCOI/PROGRAMMING/CPP/TinhThueC++"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 5
+		"minor" : 6
 	}
 }
